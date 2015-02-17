@@ -423,6 +423,13 @@ storeApp.controller('DahlsAccountCtrl', ['$scope', 'gsnProfile', 'gsnMidax', 'gs
         $scope.profile = angular.copy(p.response);
         $scope.isFacebook = (gsnApi.isNull($scope.profile.FacebookUserId, '').length > 0);
       }
+
+      if ($scope.profile.ExternalId)
+        gsnMidax.updateProfileWithMidax($scope.profile,$scope.profile.ExternalId).then(function(result){
+        	if(result.success)
+        	 $scope.profile = angular.copy(result.response)
+        });
+        
     });
 
     //$scope.profileUpdated = ($scope.currentPath == '/profile/rewardcard/updated');
@@ -488,7 +495,7 @@ storeApp.controller('DahlsAccountCtrl', ['$scope', 'gsnProfile', 'gsnMidax', 'gs
   }
 }]);
 
-storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, $interpolate, $http, $rootScope, $route, $window, $location) {
+storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', '$timeout', 'gsnStore', 'gsnMidax', '$interpolate', '$http', '$rootScope', '$route', '$window', '$location', function controller($scope, gsnProfile, gsnApi, $timeout, gsnStore, gsnMidax, $interpolate, $http, $rootScope, $route, $window, $location) {
 
   $scope.activate = activate;
   $scope.totalSavings = '';
@@ -562,21 +569,8 @@ storeApp.controller('DahlsRegistrationCtrl', ['$scope', 'gsnProfile', 'gsnApi', 
 
       $scope.email = payload;
       payload.WelcomeMessage = $interpolate(template.replace(/(data-ng-src)+/gi, 'src').replace(/(data-ng-href)+/gi, 'href'))($scope);
-
-      if (payload.ExternalId)
-        gsnMidax.GetCardMember(payload.ExternalId)
-         .then(function (result) {
-           if (result.success && result.response.LastName.toUpperCase() === payload.LastName.toUpperCase()) {
-             payload.FirstName = result.response.FirstName;             
-             payload.Email = result.response.Email;
-             payload.ReceiveEmail = result.response.ReceiveEmail;
-             payload.ReceiveSms = result.response.ReceiveSms;
-             payload.Phone = result.response.Phone;
-           }
-           registerGsnProfile(payload);
-         });
-      else
-        registerGsnProfile(payload);
+          
+      registerGsnProfile(payload);
     }
   };
 
