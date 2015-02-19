@@ -28,7 +28,7 @@
 				<label for="cardnumber">
 					Rewards card number:
 				</label>
-				<input type="text" class="form-control" name="cardnumber" placeholder="Enter rewards card number" data-ng-pattern="/^[0-9]*$/" data-ng-model="profile.ExternalId" data-gsn-valid-midax-user />
+				<input type="text" class="form-control" name="cardnumber" placeholder="Enter rewards card number" data-ng-pattern="/^[0-9]*$/" data-ng-model="profile.ExternalId" data-gsn-valid-midax-user data-profile="profile"/>
 				<span class="glyphicon form-control-feedback" data-ng-class="{'glyphicon-ok': !myForm.cardnumber.$invalid, 'glyphicon-remove': myForm.cardnumber.$invalid}"></span>
 				<p class="help-block" data-ng-show="myForm.cardnumber.$error.pattern">Rewards card number must contain digits only</p>				
 				<p class="help-block" data-ng-show="myForm.cardnumber.$error.gsnValidMidaxUser">User with this card number and last name does not exists</p>
